@@ -2,10 +2,11 @@
 
 @import helper._
 
-@main("Create Account")(loggedInUser){
+@template("Create Account")(loggedInUser){
 
     @helper.form(action = routes.Application.createUser()){
 
+        @helper.inputText(user("login"), '_label -> "Login")
         @helper.inputText(user("emailAddress"), '_label -> "Email Address")
         @helper.inputPassword(user("password"), '_label -> "Password")
         @helper.inputPassword(user("repeatPassword"), '_label -> "Repeat Password")

@@ -9,20 +9,24 @@ object EditUser extends Controller{
 
   def showUserProperties() = Action { implicit request =>
 
-    val currentUser = request.session.get("emailAddress")
+    val currentEmail = request.session.get("emailAddress")
 
-    Ok(views.html.user(currentUser)(UserInformation.getAllInformationsForUser(currentUser), UserInformation.form))
+    val login = UserInformation.getLoginByEmail(currentEmail.get)
+
+    Ok(views.html.user(currentEmail)(login)(UserInformation.getAllInformationsForUser(currentEmail), UserInformation.form))
 
   }
 
   def create() = Action { implicit request =>
 
-    val currentUser = request.session.get("emailAddress")
+    val currentEmail = request.session.get("emailAddress")
+
+    val login = UserInformation.getLoginByEmail(currentEmail.get)
 
     UserInformation.form.bindFromRequest.fold(
-      errors => BadRequest(views.html.user(currentUser)(UserInformation.getAllInformationsForUser(currentUser), errors)),
+      errors => BadRequest(views.html.user(currentEmail)(login)(UserInformation.getAllInformationsForUser(currentEmail), errors)),
       userInformation => {
-        UserInformation.createInformation(userInformation, currentUser)
+        UserInformation.createInformation(userInformation, currentEmail)
         Redirect(routes.EditUser.showUserProperties())
       }
     )

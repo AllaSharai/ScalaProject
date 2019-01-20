@@ -3,10 +3,9 @@
 
 @import helper._
 
-@main("Log In")(loggedInUser){
+@template("Log In")(loggedInUser){
 
     @helper.form(action = routes.Authentication.authenticate()){
-
 
         @helper.inputText(loginUser("emailAddress"), '_label -> "Email Address")
         @helper.inputPassword(loginUser("password"), '_label -> "Password")

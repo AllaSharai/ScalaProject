@@ -33,13 +33,14 @@
                 </div>
 
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="@routes.Application.index()">Home</a></li>
-                    <li><a href="@routes.Authentication.login()">Log In</a></li>
-                    <li><a href="@routes.Application.showCreateUser()">Create Account</a></li>
+                    <li><a href="@routes.Application.index()">Home</a></li>
+                    @if(loggedInUser.isEmpty) {
+                        <li><a href="@routes.Authentication.login()">Log In</a></li>
+                        <li><a href="@routes.Application.showCreateUser()">Create Account</a></li>
+                    }
                     @if(loggedInUser.isDefined){
                         <li><a href="@routes.EditUser.showUserProperties()">Edit User Information</a></li>
                         <li><a href="@routes.Authentication.logout()">Logout</a></li>
-
                     }
                 </ul>
             </div>

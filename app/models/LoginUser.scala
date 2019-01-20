@@ -1,18 +1,20 @@
 package models
 
 import anorm._
+import com.google.common.io.BaseEncoding
 import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data._
 import play.api.db.DB
 
-case class LoginUser(id: Long, emailAddress: String, password: String)
+case class LoginUser(id: Long, login: String, emailAddress: String, password: String)
 
 object LoginUser {
 
   val loginForm = Form(
     mapping(
       "id" -> ignored(0L),
+      "login" -> ignored(""),
       "emailAddress" -> email,
       "password" -> nonEmptyText
     )(LoginUser.apply)(LoginUser.unapply)
@@ -21,7 +23,7 @@ object LoginUser {
   )
 
   def checkIfEmailExists(emailAddress: String): Boolean = {
-    for (user <- getAllUsers){
+    for (user <- getAllUsers) {
       if (user.emailAddress == emailAddress) {
         return true
       }
@@ -30,27 +32,31 @@ object LoginUser {
   }
 
   def checkPasswordMatch(user: LoginUser): Boolean = {
-    val password = getPasswordForEmail(user.emailAddress)
-    if (user.password == password){
+    val password = BaseEncoding.base64()
+                                .decode(getPasswordForEmail(user.emailAddress))
+                                .map(_.toChar)
+                                .mkString
+    if (user.password == password) {
       return true
     } else {
       return false
     }
   }
 
-  def getPasswordForEmail(emailAddress: String) : String = {
+  def getPasswordForEmail(emailAddress: String): String = {
     DB.withConnection { implicit connection =>
       SQL("SELECT * FROM users WHERE emailAddress={emailAddress}").on("emailAddress" -> emailAddress).as(SqlParser.str("password").single)
-      }
+    }
 
   }
 
   def getAllUsers = {
     DB.withConnection { implicit connection =>
-      SQL("SELECT * FROM users")().map {row =>
+      SQL("SELECT * FROM users")().map { row =>
         LoginUser(
           id = row[Long]("id"),
           emailAddress = row[String]("emailAddress"),
+          login = row[String]("login"),
           password = row[String]("password")
         )
       }.toList

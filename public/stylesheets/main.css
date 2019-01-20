@@ -1,5 +1,17 @@
 body{
-    background-color: lightgray;
+    background-color: #d9e0d7;
+    /*background-image: url("https://www.workflowmax.com/hs-fs/hubfs/Depositphotos_128531930_m-2015.jpg?width=654&name=Depositphotos_128531930_m-2015.jpg");
+    */background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
 }
 
+h2{
+    text-transform: uppercase;
+    color: #0c06ff;
+}
+
+.error {
+    color: red;
+}
 

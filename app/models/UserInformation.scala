@@ -6,7 +6,7 @@ import play.api.Play.current
 import play.api.data._
 import play.api.data.Forms._
 
-case class UserInformation(id : Long, userId: Long, information: String)
+case class UserInformation(id: Long, userId: Long, information: String)
 
 object UserInformation {
 
@@ -39,7 +39,7 @@ object UserInformation {
     }
   }
 
-  def getIdByEmail(currentEmailAddress: Option[String]) : Integer = {
+  def getIdByEmail(currentEmailAddress: Option[String]): Integer = {
     DB.withConnection { implicit connection =>
       val id: Int = SQL(
         """
@@ -81,6 +81,18 @@ object UserInformation {
         "userId" -> userInformation.userId,
         "information" -> userInformation.information
       ).execute()
+    }
+  }
+
+  def getLoginByEmail(currentEmail: String): String = {
+    DB.withConnection {implicit connection =>
+      val login: String = SQL (
+      """
+        select * from users
+        where emailAddress = {emailAddress}
+        """)
+      .on ("emailAddress" -> currentEmail).as (SqlParser.str("login").single)
+      login
     }
   }
 
