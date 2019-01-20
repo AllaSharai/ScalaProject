@@ -1,0 +1,60 @@
+@import play.api.Play.current
+@import play.api.mvc.Session
+@import play.api.mvc.Request
+
+@(title: String)(loggedInUser: Option[String])(content: Html)
+
+
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <title>@title</title>
+
+        @*<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">*@
+        <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+            <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")">
+    </head>
+    <body>
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="@routes.Application.index()">Scala_Project_Website</a>
+                </div>
+
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="@routes.Application.index()">Home</a></li>
+                    <li><a href="@routes.Authentication.login()">Log In</a></li>
+                    <li><a href="@routes.Application.showCreateUser()">Create Account</a></li>
+                    @if(loggedInUser.isDefined){
+                        <li><a href="@routes.EditUser.showUserProperties()">Edit User Information</a></li>
+                        <li><a href="@routes.Authentication.logout()">Logout</a></li>
+
+                    }
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+
+            <div class="row">
+
+            @content
+
+            </div>
+
+        </div>
+
+
+    </body>
+</html>

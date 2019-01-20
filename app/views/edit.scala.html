@@ -1,0 +1,13 @@
+@(loggedInUser: Option[String])(id: Long, userInformation: Form[models.UserInformation])(implicit messages: Messages)
+
+@main("Edit information")(loggedInUser){
+
+    <h2>Update Contact</h2>
+
+    @helper.form(action = routes.EditUser.update(id)){
+
+        @helper.inputText(userInformation("information"), '_label -> "information")
+
+        <input type="submit" value="Update" />
+    }
+}

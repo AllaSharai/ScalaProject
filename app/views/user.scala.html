@@ -1,0 +1,35 @@
+@(loggedInUser: Option[String])(informations: List[models.UserInformation], userInformation: Form[models.UserInformation])(implicit messages: Messages)
+
+@main("User Properties")(loggedInUser){
+
+    <h2>Update User Information: @loggedInUser</h2>
+
+    @helper.form(action = routes.EditUser.create()){
+
+        @helper.inputText(userInformation("information"), '_label -> "Add information.")
+
+        <input type="submit" value="Update" />
+    }
+
+    <h2>Current User Information: @loggedInUser</h2>
+
+    <table>
+        <tbody>
+        @for(information <- informations) {
+            <tr>
+                <td>@information.information</td>
+                <td>
+                    <a href='@routes.EditUser.edit(information.id)'>Edit</a>
+                </td>
+                <td>
+                @helper.form(action = routes.EditUser.delete(information.id)){
+                    <input type="submit" value="Delete!" />
+                }
+                </td>
+            </tr>
+
+        }
+        </tbody>
+    </table>
+
+}

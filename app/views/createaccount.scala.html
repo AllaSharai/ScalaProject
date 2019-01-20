@@ -1,0 +1,25 @@
+@(user: Form[models.User])(loggedInUser: Option[String])(implicit messages: Messages)
+
+@import helper._
+
+@main("Create Account")(loggedInUser){
+
+    @helper.form(action = routes.Application.createUser()){
+
+        @helper.inputText(user("emailAddress"), '_label -> "Email Address")
+        @helper.inputPassword(user("password"), '_label -> "Password")
+        @helper.inputPassword(user("repeatPassword"), '_label -> "Repeat Password")
+
+        <input type="submit" value="Create Account" />
+
+        @if(user.hasGlobalErrors) {
+            <ul>
+            @for(error <- user.globalErrors) {
+                <li>@error.message</li>
+            }
+            </ul>
+        }
+
+    }
+
+}
