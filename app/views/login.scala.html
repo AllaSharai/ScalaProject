@@ -1,4 +1,4 @@
-@(loginUser: Form[models.LoginUser])(loggedInUser: Option[String])(implicit messages: Messages)
+@(loginUser: Form[models.LoginForm])(loggedInUser: Option[String])(implicit messages: Messages)
 
 
 @import helper._
@@ -10,7 +10,7 @@
         @helper.inputText(loginUser("emailAddress"), '_label -> "Email Address")
         @helper.inputPassword(loginUser("password"), '_label -> "Password")
 
-        <input type="submit" value="Log In" />
+        <input type="submit" value="Log In" class="btn btn-primary"/>
 
         @if(loginUser.hasGlobalErrors) {
             <ul>

@@ -1,11 +1,11 @@
 package controllers
 
-import models.User
+import models.CreateUserForm
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
 
-object Application extends Controller {
+object MainController extends Controller {
 
   def index() = Action { implicit request =>
     val userEmailAddress = request.session.get("emailAddress")
@@ -14,20 +14,25 @@ object Application extends Controller {
 
   def showCreateUser() = Action { implicit request =>
     val userEmailAddress = request.session.get("emailAddress")
-    Ok(views.html.createaccount(User.createAccountForm)(userEmailAddress))
+    Ok(views.html.createaccount(CreateUserForm.createAccountForm)(userEmailAddress))
   }
 
   def createUser() = Action { implicit request =>
 
     val userEmailAddress = request.session.get("emailAddress")
 
-    User.createAccountForm.bindFromRequest.fold(
+    CreateUserForm.createAccountForm.bindFromRequest.fold(
       errors => BadRequest(views.html.createaccount(errors)(userEmailAddress)),
       user => {
-        User.createUser(user)
-        Redirect(routes.Application.index())
+        CreateUserForm.createUser(user)
+        Redirect(routes.MainController.index())
       }
     )
+  }
+
+  def testPage() = Action { implicit request =>
+    val userEmailAddress = request.session.get("emailAddress")
+    Ok(views.html.testPage(userEmailAddress))
   }
 
 }

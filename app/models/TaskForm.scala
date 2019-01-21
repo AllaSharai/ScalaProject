@@ -6,16 +6,16 @@ import play.api.Play.current
 import play.api.data._
 import play.api.data.Forms._
 
-case class UserInformation(id: Long, userId: Long, information: String)
+case class TaskForm(id: Long, userId: Long, information: String)
 
-object UserInformation {
+object TaskForm {
 
   val form = Form(
     mapping(
       "id" -> ignored(0L),
       "userId" -> ignored(0L),
       "information" -> nonEmptyText
-    )(UserInformation.apply)(UserInformation.unapply)
+    )(TaskForm.apply)(TaskForm.unapply)
   )
 
   def delete(id: Long) {
@@ -28,7 +28,7 @@ object UserInformation {
   def getAllInformationsForUser(currentEmailAddress: Option[String]) = {
     DB.withConnection { implicit connection =>
       val contacts = SQL("SELECT * FROM data WHERE userId = {userId}").on("userId" -> getIdByEmail(currentEmailAddress))().map { row =>
-        UserInformation(
+        TaskForm(
           id = row[Long]("id"),
           userId = row[Long]("userId"),
           information = row[String]("information")
@@ -52,7 +52,7 @@ object UserInformation {
     }
   }
 
-  def createInformation(information: UserInformation, currentUserMail: Option[String]) {
+  def createTask(information: TaskForm, currentUserMail: Option[String]) {
 
     DB.withConnection { implicit connection =>
       SQL("INSERT INTO data(userid, information) VALUES({userId}, {information})").on(
@@ -62,10 +62,10 @@ object UserInformation {
     }
   }
 
-  def getInformation(id: Long) = {
+  def getTask(id: Long) = {
     DB.withConnection { implicit connection =>
       SQL("SELECT * FROM data WHERE id={id}").on("id" -> id)().headOption.map { row =>
-        UserInformation(
+        TaskForm(
           id = row[Long]("id"),
           userId = row[Long]("userId"),
           information = row[String]("information")
@@ -74,7 +74,7 @@ object UserInformation {
     }
   }
 
-  def updateInformation(id: Long, userInformation: UserInformation) {
+  def updateInformation(id: Long, userInformation: TaskForm) {
     DB.withConnection { implicit connection =>
       SQL("UPDATE data SET information = {information} WHERE id={id}").on(
         "id" -> id,

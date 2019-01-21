@@ -8,9 +8,9 @@ import play.api.db.DB
 import play.api.data.Forms._
 import play.api.data._
 
-case class User(id: Long, login: String, emailAddress: String, password: String, repeatPassword: String)
+case class CreateUserForm(id: Long, login: String, emailAddress: String, password: String, repeatPassword: String)
 
-object User {
+object CreateUserForm {
 
   val createAccountForm = Form(
     mapping(
@@ -19,7 +19,7 @@ object User {
       "emailAddress" -> email,
       "password" -> nonEmptyText,
       "repeatPassword" -> nonEmptyText
-    )(User.apply)(User.unapply)
+    )(CreateUserForm.apply)(CreateUserForm.unapply)
       .verifying("User with such a email already exists", user => emailAlreadyInDatabaseCheck(user.emailAddress))
       .verifying("User with such a login already exists", user => loginAlreadyInDatabaseCheck(user.login))
       .verifying("Passwords are not identical.", user => samePasswordsCheck(user.password, user.repeatPassword))
@@ -45,7 +45,7 @@ object User {
     }
   }
 
-  def createUser(user: User): Unit = {
+  def createUser(user: CreateUserForm): Unit = {
     DB.withConnection { implicit connection =>
 
       SQL("INSERT INTO users(login, emailAddress, password) VALUES ({login}, {emailAddress}, {password})").on(

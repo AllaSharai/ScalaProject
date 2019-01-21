@@ -1,17 +1,17 @@
-@(user: Form[models.User])(loggedInUser: Option[String])(implicit messages: Messages)
+@(user: Form[models.CreateUserForm])(loggedInUser: Option[String])(implicit messages: Messages)
 
 @import helper._
 
 @template("Create Account")(loggedInUser){
 
-    @helper.form(action = routes.Application.createUser()){
+    @helper.form(action = routes.MainController.createUser()){
 
         @helper.inputText(user("login"), '_label -> "Login")
         @helper.inputText(user("emailAddress"), '_label -> "Email Address")
         @helper.inputPassword(user("password"), '_label -> "Password")
         @helper.inputPassword(user("repeatPassword"), '_label -> "Repeat Password")
 
-        <input type="submit" value="Create Account" />
+        <input type="submit" value="Create Account" class="btn btn-primary"/>
 
         @if(user.hasGlobalErrors) {
             <ul>

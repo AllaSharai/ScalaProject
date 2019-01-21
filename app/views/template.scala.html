@@ -21,26 +21,31 @@
             <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
         <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")">
     </head>
     <body>
 
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-inverse">
             <div class="container-fluid">
-
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="@routes.Application.index()">Scala_Project_Website</a>
+                    <a class="navbar-brand" href="@routes.MainController.index()">ToDoList</a>
                 </div>
-
                 <ul class="nav navbar-nav">
-                    <li><a href="@routes.Application.index()">Home</a></li>
+                    <li class="active"><a href="@routes.MainController.index()">Home</a></li>
+                    <li><a href="@routes.MainController.testPage()">TestPage</a></li>
+                    @if(loggedInUser.isDefined){
+                        <li><a href="@routes.TaskController.showUserProperties()">Edit User Information</a></li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
                     @if(loggedInUser.isEmpty) {
-                        <li><a href="@routes.Authentication.login()">Log In</a></li>
-                        <li><a href="@routes.Application.showCreateUser()">Create Account</a></li>
+                        <li><a href="@routes.MainController.showCreateUser()"> <span class="glyphicon glyphicon-user"></span> Sing up</a></li>
+                        <li><a href="@routes.Authentication.login()"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
                     }
                     @if(loggedInUser.isDefined){
-                        <li><a href="@routes.EditUser.showUserProperties()">Edit User Information</a></li>
-                        <li><a href="@routes.Authentication.logout()">Logout</a></li>
+                        <li><a href="@routes.Authentication.logout()"> <span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                     }
                 </ul>
             </div>

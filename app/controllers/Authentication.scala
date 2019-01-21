@@ -1,6 +1,6 @@
 package controllers
 
-import models.LoginUser
+import models.LoginForm
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc._
@@ -9,7 +9,7 @@ object Authentication extends Controller{
 
   def login() = Action { implicit request =>
     val userEmailAddress = request.session.get("emailAddress")
-    Ok(views.html.login(LoginUser.loginForm)(userEmailAddress))
+    Ok(views.html.login(LoginForm.loginForm)(userEmailAddress))
   }
 
   /**
@@ -26,9 +26,9 @@ object Authentication extends Controller{
     */
   def authenticate = Action { implicit request =>
     val userEmailAddress = request.session.get("emailAddress")
-    LoginUser.loginForm.bindFromRequest.fold(
+    LoginForm.loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.login(formWithErrors)(userEmailAddress)),
-      user => Redirect(routes.Application.index()).withSession("emailAddress" -> user.emailAddress)
+      user => Redirect(routes.MainController.index()).withSession("emailAddress" -> user.emailAddress)
     )
   }
 
